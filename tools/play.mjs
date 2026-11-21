@@ -1,8 +1,8 @@
-// 用无头浏览器把发布版从头玩到尾：node tools/play.mjs [url]
+// 用无头浏览器把构建产物从头玩到尾：node tools/play.mjs [url]
 import { chromium } from 'playwright-core';
 import { mkdirSync } from 'node:fs';
 
-const url = process.argv[2] ?? 'http://127.0.0.1:4173/docs/';
+const url = process.argv[2] ?? 'http://127.0.0.1:4173/dist/';
 mkdirSync('shots', { recursive: true });
 const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/home/ubuntu/.local/bin/google-chrome', headless: true, args: ['--no-sandbox', '--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 760 } });

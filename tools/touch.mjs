@@ -1,7 +1,7 @@
 // 手机尺寸 + 触屏：滑动走、轻点拆。node tools/touch.mjs [url]
 import { chromium } from 'playwright-core';
 
-const url = process.argv[2] ?? 'http://127.0.0.1:4173/docs/';
+const url = process.argv[2] ?? 'http://127.0.0.1:4173/dist/';
 const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/home/ubuntu/.local/bin/google-chrome', headless: true, args: ['--no-sandbox'] });
 const ctx = await browser.newContext({ viewport: { width: 390, height: 780 }, hasTouch: true, isMobile: true, deviceScaleFactor: 2 });
 const page = await ctx.newPage();
