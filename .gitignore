@@ -1,0 +1,4 @@
+node_modules
+tools/font/*.ttf
+.DS_Store
+/shots

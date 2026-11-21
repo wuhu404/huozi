@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no" />
+    <meta name="theme-color" content="#f3ead6" />
+    <meta name="description" content="一页稿纸，一个人字。" />
+    <title>活字</title>
+    <style>
+      html { background: #f3ead6; }
+      #app { visibility: hidden; }
+    </style>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='5' fill='%23b8291c'/%3E%3Cpath d='M16 6 C15 15 11 22 5 26 M16 12 C18 19 22 24 27 26' stroke='%23f3ead6' stroke-width='3.2' fill='none' stroke-linecap='round'/%3E%3C/svg%3E" />
+    <script defer src="./assets/index-B--B1MFG.js"></script>
+  </head>
+  <body>
+    <div id="app">
+      <header id="top">
+        <div id="seal" aria-label="活字"><span>活</span><span>字</span></div>
+        <nav id="pages" aria-label="页码"></nav>
+        <div id="tools">
+          <button id="dictBtn" type="button" title="字典（Tab）"><span>字典</span><b id="count">0</b></button>
+          <button id="muteBtn" type="button" title="声音（M）">声</button>
+        </div>
+      </header>
+      <main id="stage">
+        <div id="sheet">
+          <div id="cells"></div>
+          <div id="ents"></div>
+        </div>
+      </main>
+      <canvas id="dark"></canvas>
+      <canvas id="fx"></canvas>
+      <div id="stamp" aria-live="polite"></div>
+      <footer id="foot">
+        <div id="gloss" aria-live="polite"><b></b><span></span></div>
+        <div id="hint"><span id="hintText"></span><button id="hintBtn" type="button" title="提示（H）">？</button></div>
+        <div id="keys">
+          <span class="k" id="kMove"><kbd>←</kbd><kbd>↑</kbd><kbd>↓</kbd><kbd>→</kbd><i>走</i></span>
+          <button class="k" id="kSplit" type="button"><kbd class="cjk">空格</kbd><i>拆</i></button>
+          <button class="k" id="kUndo" type="button"><kbd>Z</kbd><i>悔一步</i></button>
+          <button class="k" id="kReset" type="button"><kbd>R</kbd><i>重写这页</i></button>
+        </div>
+      </footer>
+      <section id="dict" class="overlay" hidden>
+        <div class="card">
+          <h2>字典</h2>
+          <p id="dictSum"></p>
+          <div id="dictList"></div>
+          <h3>印</h3>
+          <div id="sealList"></div>
+          <button id="dictClose" type="button">合上</button>
+        </div>
+      </section>
+      <section id="end" class="overlay" hidden>
+        <div class="card">
+          <h2>跋</h2>
+          <p id="endText"></p>
+          <div id="endChars"></div>
+          <div class="row">
+            <button id="endBack" type="button">回白页接着拼</button>
+            <button id="endAgain" type="button">从第一页重写</button>
+          </div>
+        </div>
+      </section>
+    </div>
+  </body>
+</html>
