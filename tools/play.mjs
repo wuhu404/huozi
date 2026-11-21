@@ -1,10 +1,15 @@
 // 用无头浏览器把构建产物从头玩到尾：node tools/play.mjs [url]
-import { chromium } from 'playwright-core';
+import { chromium, webkit } from 'playwright-core';
 import { mkdirSync } from 'node:fs';
 
 const url = process.argv[2] ?? 'http://127.0.0.1:4173/dist/';
-mkdirSync('shots', { recursive: true });
-const browser = await chromium.launch({ executablePath: process.env.CHROME ?? '/home/ubuntu/.local/bin/google-chrome', headless: true, args: ['--no-sandbox', '--autoplay-policy=no-user-gesture-required'] });
+const shots = process.env.SHOTS ?? 'shots';
+mkdirSync(shots, { recursive: true });
+// BROWSER=webkit 用 Playwright 的 WebKit（Safari 的引擎）跑同一遍：npx playwright-core install webkit
+const useWebkit = process.env.BROWSER === 'webkit';
+const browser = useWebkit
+  ? await webkit.launch()
+  : await chromium.launch({ executablePath: process.env.CHROME ?? '/home/ubuntu/.local/bin/google-chrome', headless: true, args: ['--no-sandbox', '--autoplay-policy=no-user-gesture-required'] });
 const page = await browser.newPage({ viewport: { width: 1280, height: 760 } });
 const problems = [];
 page.on('console', (m) => ['error', 'warning'].includes(m.type()) && problems.push(`console.${m.type()}: ${m.text()}`));
@@ -28,7 +33,7 @@ const meAt = () =>
     return Math.round(m[1] / c) + ',' + Math.round(m[2] / c);
   });
 const cur = () => page.evaluate(() => document.querySelector('#pages .cur')?.textContent);
-const shot = (n) => page.screenshot({ path: `shots/${n}.png` });
+const shot = (n) => page.screenshot({ path: `${shots}/${n}.png` });
 const expect = (ok, what) => {
   console.log((ok ? '  ok  ' : ' FAIL ') + what);
   if (!ok) problems.push('expect: ' + what);
