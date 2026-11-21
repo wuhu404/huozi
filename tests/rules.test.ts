@@ -108,13 +108,28 @@ test('page 3: big pushes stone, sky flies over blank paper', () => {
 
 test('page 4: blink parity', () => {
   const s = load(3);
-  run(s, 'rr');
+  run(s, 'r');
   assert.equal(you(s).g.ch, '闪');
-  assert.equal(you(s).x, 1, 'cannot land on blank paper');
-  run(s, 'srr');
-  assert.equal(you(s).x, 4);
-  run(s, 'rsrrr');
+  run(s, 'r');
+  assert.equal(you(s).x, 3, 'the first step already shows the two-cell stride');
+  run(s, 'ud');
+  assert.equal(you(s).y, 2, 'and there is room to try it up and down');
+  run(s, 'rr');
+  assert.equal(you(s).x, 5, 'cannot land on blank paper');
+  run(s, 'srrr');
   assert.ok(s.won, show(s));
+});
+
+test('page 4: 闪 is never boxed in right after the door', () => {
+  const s = load(3);
+  run(s, 'r');
+  const free = 'rlud'.split('').filter((k) => {
+    const c = structuredClone(s);
+    const before = you(c).x + ',' + you(c).y;
+    run(c, k);
+    return you(c).x + ',' + you(c).y !== before;
+  });
+  assert.ok(free.length >= 2, 'moves: ' + free.join(''));
 });
 
 test('page 5: fill the river, carry the fire', () => {
@@ -191,7 +206,7 @@ test('sandbox oddities', () => {
 
   const c = run(load(7), 'u' + 'r'.repeat(8) + 'd' + 'dlllld' + 's');
   assert.equal(entAt(c, 5, 4)!.g.ch, '日', show(c));
-  run(c, 'rdddrrru' + 'dllluul' + 's');
+  run(c, 'rdddrrrru' + 'dlllluul' + 's');
   assert.equal(entAt(c, 4, 4)!.g.ch, '旦', show(c));
   run(c, 'l');
   assert.equal(you(c).g.ch, '但', show(c));
@@ -216,4 +231,21 @@ test('fire spreads through wood and wakes a sleeper', () => {
 
 test('every seal is four characters', () => {
   for (const [k, v] of Object.entries(IDIOM)) assert.equal([...v].length, 4, k);
+});
+
+test('white page: 闪 has somewhere to land right after the door', () => {
+  const s = load(7);
+  const door = s.ents.find((e) => e.g.ch === '门')!;
+  const p = you(s);
+  p.x = door.x - 1;
+  p.y = door.y;
+  run(s, 'r');
+  assert.equal(you(s).g.ch, '闪');
+  const free = 'rlud'.split('').filter((k) => {
+    const c = structuredClone(s);
+    const before = you(c).x + ',' + you(c).y;
+    run(c, k);
+    return you(c).x + ',' + you(c).y !== before;
+  });
+  assert.ok(free.length >= 2, 'moves: ' + free.join(''));
 });

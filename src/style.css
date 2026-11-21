@@ -166,6 +166,8 @@ body.night .ent.lamp[data-ch='月'] .g, body.night .ent.lamp[data-ch='朋'] .g {
 .ghost.eaten .g { animation: eaten 0.18s ease-in forwards; }
 @keyframes eaten { to { transform: scale(0.1); opacity: 0; } }
 .ghost.after .g { opacity: 0.35; }
+.ghost.miss { transition: transform 0.15s ease-out, opacity 0.24s ease-in; }
+.ghost.miss .g { color: var(--red); }
 .ent.winning { transition: transform 0.3s, opacity 0.5s; }
 .ent.winning .g { animation: winning 0.7s ease-in forwards; }
 @keyframes winning { to { transform: scale(0.1) rotate(200deg); opacity: 0; } }

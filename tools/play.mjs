@@ -20,6 +20,13 @@ const press = async (keys, gap = 110) => {
   }
 };
 const me = () => page.evaluate(() => document.querySelector('.ent.you')?.dataset.ch);
+const meAt = () =>
+  page.evaluate(() => {
+    const e = document.querySelector('.ent.you:not(.ghost)');
+    const m = e.style.transform.match(/translate3d\(([-\d.]+)px,\s*([-\d.]+)px/);
+    const c = document.querySelector('#cells > *').getBoundingClientRect().width;
+    return Math.round(m[1] / c) + ',' + Math.round(m[2] / c);
+  });
 const cur = () => page.evaluate(() => document.querySelector('#pages .cur')?.textContent);
 const shot = (n) => page.screenshot({ path: `shots/${n}.png` });
 const expect = (ok, what) => {
@@ -87,10 +94,15 @@ await page.waitForTimeout(1500);
 expect((await cur()) === '四', 'page 四');
 
 await press('rr');
+expect((await me()) === '闪' && (await meAt()) === '3,2', '闪 strides two cells on its first step');
+await press('r');
 await page.waitForTimeout(400);
 await shot('14-shan');
-await press('zz');
-await press('rsrrsrrr');
+await page.keyboard.press('ArrowRight');
+await page.waitForTimeout(90);
+await shot('14b-miss');
+await page.waitForTimeout(500);
+await press('srrr');
 await page.waitForTimeout(1500);
 expect((await cur()) === '五', 'page 五');
 

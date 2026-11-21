@@ -450,6 +450,17 @@ function play(ev: Ev[]) {
         break;
       case 'bump': {
         kick(divs.get(me.id), 'b' + e.dir);
+        if (formOf(me.g.ch).blink && e.why !== 'jail') {
+          // 闪过不去的时候，让残影把“落点在两格外”演出来，免得看起来像被钉住了
+          const tx = me.x + DX[e.dir] * 2;
+          const ty = me.y + DY[e.dir] * 2;
+          const a = mk(me.g.ch, me.x, me.y, 'ghost after miss');
+          dress(a, me.g.ch, false);
+          requestAnimationFrame(() => put(a, tx, ty));
+          setTimeout(() => a.classList.add('fade'), 190);
+          setTimeout(() => a.remove(), 460);
+          ring(tx, ty, RED, 0.42, 0.1);
+        }
         if (e.why === 'heavy') {
           sfx.heavy();
           const f = s.ents.find((o) => o.x === me.x + DX[e.dir] && o.y === me.y + DY[e.dir]);
